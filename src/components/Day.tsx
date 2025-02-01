@@ -98,8 +98,10 @@ function Day({
           style={[
             style.rangeRoot,
             {
-              left: '50%',
+              left: 0,
               backgroundColor: rangeRootBackground,
+              borderTopLeftRadius: 100,
+              borderBottomLeftRadius: 100,
             },
           ]}
         />
@@ -110,8 +112,10 @@ function Day({
           style={[
             style.rangeRoot,
             {
-              right: '50%',
+              right: 0,
               backgroundColor: rangeRootBackground,
+              borderTopRightRadius: 100,
+              borderBottomRightRadius: 100,
             },
           ]}
         />
