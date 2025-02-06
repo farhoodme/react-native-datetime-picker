@@ -1,16 +1,20 @@
 import React from 'react';
 import { Text, View, Pressable, StyleSheet } from 'react-native';
 import { useCalendarContext } from '../CalendarContext';
-import { getParsedDate, getMonths } from '../utils';
+import { getParsedDate, getMonths, isMonthDisabled } from '../utils';
 
 const MonthSelector = () => {
-  const { currentDate, onSelectMonth, theme } = useCalendarContext();
+  const { currentDate, onSelectMonth, theme, minDate, maxDate } = useCalendarContext();
   const { month } = getParsedDate(currentDate);
 
   return (
     <View style={styles.container} testID="month-selector">
       <View style={styles.monthsContainer}>
         {getMonths()?.map((item, index) => {
+          const disabled = isMonthDisabled(index, currentDate, {
+            minDate,
+            maxDate,
+          });
           const activeItemStyle =
             index === month
               ? {
@@ -28,15 +32,17 @@ const MonthSelector = () => {
             <Pressable
               key={index}
               style={styles.monthCell}
-              onPress={() => onSelectMonth(index)}
+              onPress={() => (disabled ? null : onSelectMonth(index))}
               accessibilityRole="button"
               accessibilityLabel={item}
+              disabled={disabled}
             >
               <View
                 style={[
                   styles.month,
                   theme?.monthContainerStyle,
                   activeItemStyle,
+                  disabled && styles.disabledMonth,
                 ]}
               >
                 <Text key={index} style={textStyle}>
@@ -72,6 +78,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: '#E5E5E5',
     backgroundColor: '#FFFFFF',
+  },
+  disabledMonth: {
+    opacity: 0.3,
   },
 });
 

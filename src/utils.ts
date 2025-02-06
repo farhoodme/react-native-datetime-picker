@@ -90,6 +90,39 @@ export function isDateDisabled(
   return false;
 }
 
+export function isYearDisabled(
+  year: number,
+  {
+    minDate,
+    maxDate,
+  }: {
+    minDate?: DateType;
+    maxDate?: DateType;
+  }
+): boolean {
+  if (minDate && year < getDateYear(minDate)) return true;
+  if (maxDate && year > getDateYear(maxDate)) return true;
+
+  return false;
+}
+
+export function isMonthDisabled(
+  month: number,
+  date: DateType,
+  {
+    minDate,
+    maxDate,
+  }: {
+    minDate?: DateType;
+    maxDate?: DateType;
+  }
+): boolean {
+  if (minDate && month < getDateMonth(minDate) && getDateYear(date) === getDateYear(minDate)) return true;
+  if (maxDate && month > getDateMonth(maxDate) && getDateYear(date) === getDateYear(maxDate)) return true;
+
+  return false;
+}
+
 export const getFormatedDate = (date: DateType, format: string) =>
   dayjs(date).format(format);
 
