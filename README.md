@@ -17,13 +17,18 @@ DateTimePicker component for React Native that allows you to create a customizab
 
 ```sh
 npm install react-native-ui-datepicker
+npm install dayjs@1.11.13
 ```
 
 Or
 
 ```sh
 yarn add react-native-ui-datepicker
+yarn add dayjs@1.11.13
 ```
+
+### Regarding DayJS installation:
+  This needs to be the same version as this library otherwise different instances will be used resulting in locales not working properly.
 
 ## Usage
 
