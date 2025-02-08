@@ -8,17 +8,17 @@ import {
   ViewStyle,
 } from 'react-native';
 import { useCalendarContext } from '../CalendarContext';
-import { getDateYear, getYearRange } from '../utils';
+import { getDateYear, getYearRange, isYearDisabled } from '../utils';
 
 const YearSelector = () => {
-  const { currentDate, currentYear, date, onSelectYear, theme } =
-    useCalendarContext();
+  const { currentDate, currentYear, date, onSelectYear, theme, minDate, maxDate } = useCalendarContext();
   const selectedYear = getDateYear(date);
 
   const generateCells = useCallback(() => {
     const years = getYearRange(currentYear);
     const activeYear = getDateYear(currentDate);
     const column = years.map((year) => {
+      const disabled = isYearDisabled(year, { minDate, maxDate });
       const activeItemStyle: ViewStyle =
         year === selectedYear
           ? {
@@ -44,13 +44,19 @@ const YearSelector = () => {
       return (
         <Pressable
           key={year}
-          onPress={() => onSelectYear(year)}
+          disabled={disabled}
+          onPress={() => (disabled ? null : onSelectYear(year))}
           style={styles.yearCell}
           accessibilityRole="button"
           accessibilityLabel={year.toString()}
         >
           <View
-            style={[styles.year, theme?.yearContainerStyle, activeItemStyle]}
+            style={[
+              styles.year,
+              theme?.yearContainerStyle,
+              activeItemStyle,
+              disabled && styles.disabledYear,
+            ]}
           >
             <Text key={year} style={textStyle}>
               {year}
@@ -93,6 +99,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: '#E5E5E5',
     backgroundColor: '#FFFFFF',
+  },
+  disabledYear: {
+    opacity: 0.3,
   },
 });
 
